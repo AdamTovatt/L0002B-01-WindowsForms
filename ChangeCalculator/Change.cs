@@ -26,6 +26,12 @@ namespace ChangeCalculator
                 return; //vi ska inte fortsätta köra den här funktionen om vi har kommit hit
             }
 
+            if(payed < 0 || price < 0)
+            {
+                MessageBox.Show("Var god ange värden som är positiva"); //vi tillåter inte negativa värden
+                return;
+            }
+
             if(payed < price)
             {
                 MessageBox.Show("Du måste betala minst så mycket det kostar"); //man måste betala minst så mycket det kostar
@@ -34,13 +40,11 @@ namespace ChangeCalculator
 
             Dictionary<Denomination, int> change = changeCalculator.GetChange(payed - price); //räknar ut växeln som användaren sa få
 
-            StringBuilder changeText = new StringBuilder("Din växel:\n"); //kommer att användas för att skapa en text som visas för användaren
+            StringBuilder changeText = new StringBuilder(change.Keys.Count > 0 ? "Din växel:\n" : "Det blev ingen växel\n"); //kommer att användas för att skapa en text som visas för användaren
             foreach(Denomination denomination in change.Keys)
             {
                 changeText.Append(string.Format("{0} {1}\n", change[denomination], change[denomination] > 1 ? denomination.PluralName : denomination.SingularName)); //lägger till text för att visa växeln. Om det är fler än 1 av en valör tar vi pluralversionen av namnet, annars singularversionen
             }
-
-            changeText.Remove(changeText.Length - 1, 1); //ta bort sista tecknet som alltid kommer vara en onödig radbrytning
 
             MessageBox.Show(changeText.ToString()); //visar texten med växelinformation
         }
